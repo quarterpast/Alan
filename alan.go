@@ -10,12 +10,13 @@ type Alan struct {
 	*gtk.GtkWindow
 	tabs *gtk.GtkNotebook
 }
-func NewAlan() Alan {
+func _Alan() Alan {
 	alan := Alan{gtk.Window(gtk.GTK_WINDOW_TOPLEVEL),gtk.Notebook()}
 
 	alan.tabs.SetShowTabs(false)
-	alan.tabs.Connect("focus-tab",func(pos int) {
-		alan.SetTitle(alan.tabs.)
+	alan.tabs.Connect("change-current-page",func(pos int) {
+		tab := alan.tabs.GetNthPage(pos)
+		alan.SetTitle(alan.tabs.GetMenuLabelText(tab))
 	})
 	alan.tabs.Connect("page-removed",func() {
 		if alan.tabs.GetNPages() == 1 {
@@ -33,7 +34,7 @@ func NewAlan() Alan {
 	return alan
 }
 func (a Alan) OpenDialog() {
-	dialog := gtk.FileChooserDialog("Open",&a.GtkWindow,gtk.GTK_FILE_CHOOSER_ACTION_OPEN,"Open",1)
+	dialog := gtk.FileChooserDialog("Open",a.GtkWindow,gtk.GTK_FILE_CHOOSER_ACTION_OPEN,"Open",1)
 	dialog.ShowAll()
 }
 func (a Alan) Open(files []string) {
@@ -45,7 +46,7 @@ func main() {
 	gtk.Init(&os.Args)
 	defer gtk.Main()
 
-	app := NewAlan()
+	app := _Alan()
 	if(len(os.Args) > 1) {
 		app.Open(os.Args[1:])
 	}
