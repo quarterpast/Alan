@@ -38,7 +38,7 @@ func _Alan() Alan {
 			alan.tabs.SetShowTabs(true)
 		}
 	})
-	alan.tabs.SetActionWidget(alan.toolbar)
+	alan.tabs.SetActionWidget(alan.toolbar,gtk.GTK_PACK_END)
 	alan.SetDefaultSize(400,500)
 	alan.Connect("destroy",gtk.MainQuit)
 	alan.Add(alan.tabs)
