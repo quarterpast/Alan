@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/mattn/go-gtk/gtk"
+	"github.com/quarterto/go-gtk/gtk"
 	"os"
 	"fmt"
 )
@@ -9,9 +9,19 @@ import (
 type Alan struct {
 	*gtk.GtkWindow
 	tabs *gtk.GtkNotebook
+	toolbar *gtk.GtkHBox
+}
+
+func TabToolbar() *gtk.GtkHBox {
+	hbox := gtk.HBox(true,0)
+	return hbox
 }
 func _Alan() Alan {
-	alan := Alan{gtk.Window(gtk.GTK_WINDOW_TOPLEVEL),gtk.Notebook()}
+	alan := Alan{}
+
+	alan.GtkWindow = gtk.Window(gtk.GTK_WINDOW_TOPLEVEL)
+	alan.tabs = gtk.Notebook()
+	alan.toolbar = TabToolbar()
 
 	alan.tabs.SetShowTabs(false)
 	alan.tabs.Connect("change-current-page",func(pos int) {
@@ -28,6 +38,7 @@ func _Alan() Alan {
 			alan.tabs.SetShowTabs(true)
 		}
 	})
+	alan.tabs.SetActionWidget(alan.toolbar)
 	alan.SetDefaultSize(400,500)
 	alan.Connect("destroy",gtk.MainQuit)
 	alan.Add(alan.tabs)
